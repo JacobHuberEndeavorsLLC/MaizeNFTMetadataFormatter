@@ -1,0 +1,62 @@
+name: Build and Package Executables
+
+on: [push]
+
+jobs:
+  build-windows:
+    name: Build for Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+      - name: Build Executable
+        run: pyinstaller --onefile --clean MaizeNFTMetadataFormatter.py
+      - name: Prepare folders
+        run: |
+          New-Item -Path . -Name "win-MaizeNFTMetadataFormatter" -ItemType "directory"
+          New-Item -Path win-MaizeNFTMetadataFormatter -Name "input" -ItemType "directory"
+          New-Item -Path win-MaizeNFTMetadataFormatter -Name "output" -ItemType "directory"
+          Move-Item dist/MaizeNFTMetadataFormatter.exe win-MaizeNFTMetadataFormatter/
+      - name: Zip the package
+        run: Compress-Archive -Path win-MaizeNFTMetadataFormatter/* -DestinationPath win-MaizeNFTMetadataFormatter.zip
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: win-MaizeNFTMetadataFormatter
+          path: win-MaizeNFTMetadataFormatter.zip
+
+  build-macos:
+    name: Build for macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install pyinstaller
+      - name: Build Executable
+        run: pyinstaller --onefile --clean MaizeNFTMetadataFormatter.py
+      - name: Prepare folders
+        run: |
+          mkdir osx-MaizeNFTMetadataFormatter
+          mkdir osx-MaizeNFTMetadataFormatter/input
+          mkdir osx-MaizeNFTMetadataFormatter/output
+          mv dist/MaizeNFTMetadataFormatter osx-MaizeNFTMetadataFormatter/
+      - name: Zip the package
+        run: zip -r osx-MaizeNFTMetadataFormatter.zip osx-MaizeNFTMetadataFormatter
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: osx-MaizeNFTMetadataFormatter
+          path: osx-MaizeNFTMetadataFormatter.zip
