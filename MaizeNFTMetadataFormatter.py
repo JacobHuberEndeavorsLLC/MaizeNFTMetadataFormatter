@@ -1,9 +1,10 @@
 import json
 import os
 
-# Define the directory containing the JSON files
-json_dir = '/Users/cobmin/downloads/80/alienanimaljson'  # Update this path based on your pwd output
-output_dir = '/Users/cobmin/downloads/80/reformatted_json'  # New directory for reformatted files
+# Define the directory relative to the script location
+script_dir = os.path.dirname(os.path.realpath(__file__))  # Gets the directory where the script/executable is located
+input_dir = os.path.join(script_dir, 'input')  # Input folder
+output_dir = os.path.join(script_dir, 'output')  # Output folder
 
 # Check if the output directory exists, if not, create it
 if not os.path.exists(output_dir):
@@ -25,9 +26,9 @@ def reformat_json_data(original_data):
     return reformatted_data
 
 # Loop through all files in the directory
-for filename in os.listdir(json_dir):
+for filename in os.listdir(input_dir):
     if filename.endswith('.json'):
-        file_path = os.path.join(json_dir, filename)
+        file_path = os.path.join(input_dir, filename)
         
         # Read the original JSON data
         with open(file_path, 'r') as file:
