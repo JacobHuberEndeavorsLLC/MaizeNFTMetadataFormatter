@@ -2,6 +2,9 @@ name: Build and Package Executables
 
 on: [push]
 
+permissions:
+  issues: read
+
 jobs:
   build-windows:
     name: Build for Windows
@@ -61,8 +64,10 @@ jobs:
           name: osx-MaizeNFTMetadataFormatter
           path: osx-MaizeNFTMetadataFormatter.zip
 
-  create-release: 
+  create-release:
     name: Create Release
+    permissions:
+      contents: write
     needs: [build-windows, build-macos]  
     runs-on: ubuntu-latest
     steps:
