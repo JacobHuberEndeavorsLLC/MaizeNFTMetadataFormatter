@@ -1,12 +1,22 @@
 import json
 import os
+import sys
 
-# Define the directory relative to the script location
-script_dir = os.path.dirname(os.path.realpath(__file__))  # Gets the directory where the script/executable is located
-input_dir = os.path.join(script_dir, 'input')  # Input folder
-output_dir = os.path.join(script_dir, 'output')  # Output folder
+# The application's directory when running the executable
+if getattr(sys, 'frozen', False):
+    application_dir = os.path.dirname(sys.executable)
+else:
+    # The directory of the script file if not running as an executable
+    application_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Check if the output directory exists, if not, create it
+# Define the input and output directories
+input_dir = os.path.join(application_dir, 'input')
+output_dir = os.path.join(application_dir, 'output')
+
+# Ensure input and output directories exist
+if not os.path.exists(input_dir) or not os.listdir(input_dir):
+    sys.exit("\n--\nInput directory is empty or does not exist. Please add some JSON files to process.\n--")
+
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
@@ -27,7 +37,7 @@ def reformat_json_data(original_data):
 
 # Check if the input directory is empty
 if not os.listdir(input_dir):
-    print("Input directory is empty. Please add some JSON files to process.")
+    print("\n--\nInput directory is empty. Please add some JSON files to process.\n--")
 else:
     # Process files in the input directory
     for filename in os.listdir(input_dir):
@@ -44,8 +54,8 @@ else:
                     json.dump(reformatted_data, file, indent=4)
                     
             except json.JSONDecodeError:
-                print(f"Error: '{filename}' is not a valid JSON file and was skipped.")
+                print(f"\n--\nError: '{filename}' is not a valid JSON file and was skipped.\n--")
             except Exception as e:
-                print(f"An error occurred with '{filename}': {e}")
+                print(f"\n--\nAn error occurred with '{filename}': {e}\n--")
     
-    print("JSON files have been reformatted and saved to", output_dir)
+    print(f"\n--\nJSON files have been reformatted and saved to", output_dir, "\n--")
