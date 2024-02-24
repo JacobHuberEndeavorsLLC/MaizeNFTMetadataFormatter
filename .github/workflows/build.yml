@@ -61,40 +61,38 @@ jobs:
           name: osx-MaizeNFTMetadataFormatter
           path: osx-MaizeNFTMetadataFormatter.zip
 
-          create-release:
-            name: Create Release
-            needs: [build-windows, build-macos]  
-            runs-on: ubuntu-latest
-            steps:
-              - name: Create Release
-                id: create_release
-                uses: actions/create-release@v1
-                env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-                with:
-                  tag_name: v1.0.0  
-                  release_name: Release v1.0.0
-                  draft: false
-                  prerelease: false
-        
-              
-              - name: Upload Windows Executable
-                uses: actions/upload-release-asset@v1
-                env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}  
-                  asset_path: ./win-MaizeNFTMetadataFormatter.zip
-                  asset_name: win-MaizeNFTMetadataFormatter.zip
-                  asset_content_type: application/zip
-        
-              # Upload macOS Executable as a Release Asset
-              - name: Upload macOS Executable
-                uses: actions/upload-release-asset@v1
-                env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./osx-MaizeNFTMetadataFormatter.zip
-                  asset_name: osx-MaizeNFTMetadataFormatter.zip
-                  asset_content_type: application/zip
+  create-release: 
+    name: Create Release
+    needs: [build-windows, build-macos]  
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v1.0.0
+          release_name: Release v1.0.0
+          draft: false
+          prerelease: false
+
+      - name: Upload Windows Executable
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./win-MaizeNFTMetadataFormatter.zip
+          asset_name: win-MaizeNFTMetadataFormatter.zip
+          asset_content_type: application/zip
+
+      - name: Upload macOS Executable
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./osx-MaizeNFTMetadataFormatter.zip
+          asset_name: osx-MaizeNFTMetadataFormatter.zip
+          asset_content_type: application/zip
