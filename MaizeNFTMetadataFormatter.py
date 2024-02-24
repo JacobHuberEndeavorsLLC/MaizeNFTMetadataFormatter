@@ -25,21 +25,27 @@ def reformat_json_data(original_data):
     }
     return reformatted_data
 
-# Loop through all files in the directory
-for filename in os.listdir(input_dir):
-    if filename.endswith('.json'):
-        file_path = os.path.join(input_dir, filename)
-        
-        # Read the original JSON data
-        with open(file_path, 'r') as file:
-            original_data = json.load(file)
-        
-        # Reformat the data
-        reformatted_data = reformat_json_data(original_data)
-        
-        # Write the reformatted data to the new file in output directory
-        output_file_path = os.path.join(output_dir, filename)
-        with open(output_file_path, 'w') as file:
-            json.dump(reformatted_data, file, indent=4)
-
-print("JSON files have been reformatted and saved to", output_dir)
+# Check if the input directory is empty
+if not os.listdir(input_dir):
+    print("Input directory is empty. Please add some JSON files to process.")
+else:
+    # Process files in the input directory
+    for filename in os.listdir(input_dir):
+        if filename.endswith('.json'):
+            file_path = os.path.join(input_dir, filename)
+            try:
+                with open(file_path, 'r') as file:
+                    original_data = json.load(file)
+                
+                reformatted_data = reformat_json_data(original_data)
+                
+                output_file_path = os.path.join(output_dir, filename)
+                with open(output_file_path, 'w') as file:
+                    json.dump(reformatted_data, file, indent=4)
+                    
+            except json.JSONDecodeError:
+                print(f"Error: '{filename}' is not a valid JSON file and was skipped.")
+            except Exception as e:
+                print(f"An error occurred with '{filename}': {e}")
+    
+    print("JSON files have been reformatted and saved to", output_dir)
