@@ -10,9 +10,9 @@ jobs:
     name: Build for Windows
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - name: Install Dependencies
@@ -30,7 +30,7 @@ jobs:
       - name: Zip the package
         run: Compress-Archive -Path win-MaizeNFTMetadataFormatter/* -DestinationPath win-MaizeNFTMetadataFormatter.zip
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: win-MaizeNFTMetadataFormatter
           path: win-MaizeNFTMetadataFormatter.zip
@@ -39,9 +39,9 @@ jobs:
     name: Build for macOS
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
       - name: Install Dependencies
@@ -59,7 +59,7 @@ jobs:
       - name: Zip the package
         run: zip -r osx-MaizeNFTMetadataFormatter.zip osx-MaizeNFTMetadataFormatter
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: osx-MaizeNFTMetadataFormatter
           path: osx-MaizeNFTMetadataFormatter.zip
